@@ -15,6 +15,10 @@ export async function getApiKey(): Promise<string> {
   try { localStorage.setItem("levee_key", r.apiKey) } catch { /* ignore */ }
   return r.apiKey
 }
+function storeKey(key: string | null) {
+  memKey = key
+  try { key ? localStorage.setItem("levee_key", key) : localStorage.removeItem("levee_key") } catch { /* ignore */ }
+}
 function resetApiKey() {
   memKey = null
   try { localStorage.removeItem("levee_key") } catch { /* ignore */ }
@@ -111,3 +115,15 @@ export const startCheckout = async (packId: string) => {
 }
 export const confirmCheckout = (sessionId: string) =>
   call<{ paid: boolean; balance: number; kind?: "plan" | "pack"; plan?: string }>("/v1/stripe/confirm", post("/v1/stripe/confirm", { sessionId }))
+
+// Accounts (Google Sign-In). The server verifies Google's ID token and returns the API key linked to that Google account.
+export const getAccountConfig = () => call<{ googleClientId: string | null }>("/v1/accounts/config")
+export const getAccount = () => call<{ userId: string; email: string | null }>("/v1/accounts/me")
+export const signInWithGoogle = async (credential: string) => {
+  const r = await call<{ email: string; userId: string; apiKey: string }>("/v1/accounts/google", post("/v1/accounts/google", { credential }))
+  storeKey(r.apiKey)
+  window.dispatchEvent(new Event("levee:refresh"))
+  return r
+}
+// Signing out drops the key; the next request starts a fresh anonymous session (with its own free trial).
+export const signOut = () => { storeKey(null); window.dispatchEvent(new Event("levee:refresh")) }

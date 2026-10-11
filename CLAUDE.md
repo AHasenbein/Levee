@@ -26,6 +26,7 @@ Stack: Vite + React + TypeScript UI, Tailwind v4, shadcn/ui, Recharts. Hono API 
 ## Environment (never commit secrets; `.env*` files are gitignored)
 - `.env`: `STRIPE_SECRET_KEY` (test mode), `STRIPE_PUBLISHABLE_KEY`.
 - `.env.monetization`: optional subscription-billing service settings. Without it, billing is off and the API falls back to Stripe credits and pay-per-call (402).
+- `GOOGLE_CLIENT_ID` (in `.env`): Google OAuth Web client ID for account sign-in. Without it the Sign in button explains it is not configured. Add the app origin (http://localhost:5173 and the Netlify URL) under Authorized JavaScript origins.
 - Server env: `PAYMENTS_MODE` (mock | bypass), `PRICE_USD`, `MEMO_SOURCE` (template | auto), `FREE_ANALYSES`, `APP_URL`, `PAYMENT_SECRET`, `API_KEY_SECRET`.
 
 ## How payments work
