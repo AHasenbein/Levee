@@ -6,9 +6,11 @@ import crypto from "node:crypto"
 const KEY_SECRET = process.env.API_KEY_SECRET ?? "levee-dev-only-secret"
 const mac = (userId) => crypto.createHmac("sha256", KEY_SECRET).update(userId).digest("base64url").slice(0, 22)
 
+export const keyFor = (userId) => `lev_${userId}.${mac(userId)}`
+
 export function issueKey() {
   const userId = "u_" + crypto.randomBytes(10).toString("hex")
-  return { userId, apiKey: `lev_${userId}.${mac(userId)}` }
+  return { userId, apiKey: keyFor(userId) }
 }
 
 export function userFromAuth(header) {

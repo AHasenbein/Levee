@@ -9,6 +9,7 @@ import CustomDeal from "@/components/CustomDeal"
 import AgentPage from "@/components/AgentPage"
 import PricingPage from "@/components/PricingPage"
 import AboutPage from "@/components/AboutPage"
+import AccountMenu from "@/components/AccountMenu"
 
 type Page = "analyze" | "agent" | "pricing" | "about"
 const NAV: [Page, string][] = [["analyze", "Analyze"], ["agent", "Deal Finder"], ["pricing", "Pricing"], ["about", "About"]]
@@ -66,6 +67,7 @@ function Shell() {
           </div>
           <div className="flex items-center gap-2 text-xs">
             <Badge variant="outline">Demo data</Badge>
+            <AccountMenu />
             <button onClick={() => setPage("pricing")} className="tnum rounded-md border px-2.5 py-1 text-muted-foreground hover:text-foreground">{credits ?? 0} analyses left</button>
           </div>
         </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
-import { getLedger, getPacks, getCredits, openStripePortal, startCheckout, subscribe, type Pack, type PlanStatus } from "@/lib/client"
+import { getMonetization, getLedger, getPacks, getCredits, openStripePortal, startCheckout, subscribe, type Pack, type PlanStatus } from "@/lib/client"
 import { usd2 } from "@/lib/format"
-import type { Health, Ledger } from "@/lib/types"
+import type { Health, Ledger, MonetizationStatus } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
@@ -13,11 +13,13 @@ export default function PricingPage({ health }: { health: Health | null }) {
   const [subErr, setSubErr] = useState<string | null>(null)
   const [subbing, setSubbing] = useState<string | null>(null)
   const [buying, setBuying] = useState<string | null>(null)
+  const [mon, setMon] = useState<MonetizationStatus | null>(null)
   const [payErr, setPayErr] = useState<string | null>(null)
 
   useEffect(() => {
     getPacks().then(setPacks as never).catch(() => {})
     getCredits().then(setCredits).catch(() => {})
+    getMonetization().then(setMon).catch(() => {})
   }, [])
   useEffect(() => { getLedger().then(setLedger).catch(() => {}) }, [])
 
@@ -64,6 +66,7 @@ export default function PricingPage({ health }: { health: Health | null }) {
         <h2 className="text-lg font-semibold">Or subscribe to a monthly plan</h2>
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Billed every month by Stripe. <b className="text-foreground">Use the test card 4242 4242 4242 4242, any future date, any 3 digits.</b> When a plan's analyses run out, any prepaid analyses are used, then you can buy more above.</p>
+          {mon && mon.state !== "not-configured" && <p className="mt-2 text-xs text-muted-foreground">Plans, entitlements and usage metering powered by AWS App Monetization.</p>}
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {[{ id: "free", name: "Free", priceCents: 0, analyses: 3 }, ...(packs?.plans.filter((p) => p.priceCents > 0) ?? [])].map((p) => {
               const current = credits?.plan?.planId === p.id

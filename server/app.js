@@ -13,10 +13,11 @@ import { runAgent } from "./agent.js"
 import { store } from "./store.js"
 import { monetizationStatus } from "./monetization.js"
 import { createBilling, issueKey } from "./billing.js"
+import * as Accounts from "./accounts.js"
 import { createStripeBilling, createCredits, safeOrigin, PACKS, PLANS } from "./stripe.js"
 import { geocode, femaZone } from "./lookup.js"
 
-export function createApp({ billing = createBilling(), stripe = { enabled: false, credits: createCredits() } } = {}) {
+export function createApp({ billing = createBilling(), stripe = { enabled: false, credits: createCredits() }, verifyGoogle = Accounts.verifyGoogleToken } = {}) {
   const app = new Hono()
   app.use("*", cors())
   // Basic per-IP rate limit (per instance; a speed bump, not a security boundary).
@@ -33,6 +34,7 @@ export function createApp({ billing = createBilling(), stripe = { enabled: false
   app.use("*", bodyLimit({ maxSize: 64 * 1024, onError: (c) => c.json({ error: "Body too large" }, 413) }))
   app.onError((e, c) => {
     if (e instanceof ValidationError) return c.json({ error: e.message }, 400)
+    if (e instanceof Accounts.AccountError) return c.json({ error: e.message }, e.status)
     console.error(e)
     return c.json({ error: "Internal error" }, 500)
   })
@@ -71,6 +73,22 @@ export function createApp({ billing = createBilling(), stripe = { enabled: false
     const k = issueKey()
     await ensureTrial(k.userId)
     return c.json({ ...k, freeAnalyses: FREE_ANALYSES })
+  })
+
+  // Accounts: Google Sign-In. The browser sends Google's signed ID token; we verify it and return the API key for the
+  // linked userId. Signing in from an anonymous session claims that identity (first time only), so credits carry over.
+  app.get("/v1/accounts/config", (c) => c.json({ googleClientId: Accounts.googleClientId() }))
+  app.post("/v1/accounts/google", async (c) => {
+    const { credential } = await c.req.json().catch(() => ({}))
+    const profile = await verifyGoogle(credential)
+    const a = await Accounts.signInWithGoogle(profile, { claimUserId: billing.identify(c), newUserId: issueKey().userId })
+    await ensureTrial(a.userId)
+    return c.json({ email: a.email, userId: a.userId, apiKey: a.apiKey })
+  })
+  app.get("/v1/accounts/me", async (c) => {
+    const userId = billing.identify(c)
+    if (!userId) return c.json({ error: "Missing or invalid API key" }, 401)
+    return c.json({ userId, email: (await Accounts.accountFor(userId))?.email ?? null })
   })
 
   // Stripe credit packs (test mode). Credits are spent before pay-per-call.

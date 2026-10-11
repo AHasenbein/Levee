@@ -1,3 +1,4 @@
+import crypto from "node:crypto"
 import assert from "node:assert/strict"
 import test from "node:test"
 import { createApp } from "../server/app.js"
@@ -306,4 +307,55 @@ test("free trial analyses are granted once per customer, even for keys issued ea
   const r = await (await a.request("/v1/stress", { method: "POST", headers: h, body: JSON.stringify(golden) })).json()
   assert.equal(r.payment.mode, "credit"); assert.equal(r.payment.creditsLeft, 2)
   process.env.FREE_ANALYSES = "0"
+})
+
+function googleFixture() {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", { modulusLength: 2048 })
+  const jwk = { ...publicKey.export({ format: "jwk" }), kid: "k1", alg: "RS256", use: "sig" }
+  const b = (o) => Buffer.from(JSON.stringify(o)).toString("base64url")
+  const token = (claims, { key = privateKey } = {}) => {
+    const head = b({ alg: "RS256", kid: "k1", typ: "JWT" }), body = b({ iss: "https://accounts.google.com", aud: "cid", exp: Math.floor(Date.now() / 1000) + 600, sub: "g-1", email: "Ada@Example.com", email_verified: true, ...claims })
+    return `${head}.${body}.${crypto.sign("RSA-SHA256", Buffer.from(head + "." + body), key).toString("base64url")}`
+  }
+  return { token, opts: { clientId: "cid", getKeys: async () => [jwk] } }
+}
+
+test("google token verification accepts a valid token and rejects forged, wrong-audience, expired and unverified ones", async () => {
+  const { verifyGoogleToken } = await import("../server/accounts.js")
+  const g = googleFixture()
+  assert.deepEqual(await verifyGoogleToken(g.token({}), g.opts), { sub: "g-1", email: "ada@example.com", name: null })
+  const other = crypto.generateKeyPairSync("rsa", { modulusLength: 2048 }).privateKey
+  await assert.rejects(verifyGoogleToken(g.token({}, { key: other }), g.opts), /Invalid Google credential/)
+  await assert.rejects(verifyGoogleToken(g.token({ aud: "someone-else" }), g.opts), /Invalid Google credential/)
+  await assert.rejects(verifyGoogleToken(g.token({ iss: "https://evil.example" }), g.opts), /Invalid Google credential/)
+  await assert.rejects(verifyGoogleToken(g.token({ exp: 1 }), g.opts), /Invalid Google credential/)
+  await assert.rejects(verifyGoogleToken(g.token({ email_verified: false }), g.opts), /not verified/)
+  await assert.rejects(verifyGoogleToken("a.b.c", g.opts), /Invalid Google credential/)
+  await assert.rejects(verifyGoogleToken(g.token({}), { ...g.opts, clientId: null }), /not configured/)
+})
+
+test("accounts: google sign-in returns a working key, is stable across logins, and keeps an anonymous key's credits", async () => {
+  const { verifyGoogleToken } = await import("../server/accounts.js")
+  const { issueKey, createBilling, userFromAuth } = await import("../server/billing.js")
+  const { createStripeBilling, createCredits } = await import("../server/stripe.js")
+  const g = googleFixture(), credits = createCredits()
+  const a = createApp({ billing: createBilling({ enabled: false }), stripe: await createStripeBilling({ credits }), verifyGoogle: (t) => verifyGoogleToken(t, g.opts) })
+  const go = (credential, headers) => a.request("/v1/accounts/google", { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify({ credential }) })
+  const sub = "g-" + Date.now()
+  const anon = issueKey()
+  await credits.add(anon.userId, 7)
+  const first = await (await go(g.token({ sub }), { Authorization: `Bearer ${anon.apiKey}` })).json()
+  assert.equal(first.userId, anon.userId); assert.equal(first.email, "ada@example.com")
+  assert.equal(userFromAuth(`Bearer ${first.apiKey}`), first.userId)
+  assert.equal((await (await a.request("/v1/credits", { headers: { Authorization: `Bearer ${first.apiKey}` } })).json()).balance, 7)
+  // Signing in again from a fresh browser returns the same identity, even if that browser has its own anonymous key.
+  const again = await (await go(g.token({ sub }), { Authorization: `Bearer ${issueKey().apiKey}` })).json()
+  assert.equal(again.userId, first.userId)
+  // A different Google account does not take over an already-claimed anonymous identity.
+  const second = await (await go(g.token({ sub: sub + "b" }), { Authorization: `Bearer ${anon.apiKey}` })).json()
+  assert.notEqual(second.userId, anon.userId)
+  const me = await (await a.request("/v1/accounts/me", { headers: { Authorization: `Bearer ${first.apiKey}` } })).json()
+  assert.equal(me.email, "ada@example.com")
+  assert.equal((await go("garbage")).status, 401)
+  assert.equal((await a.request("/v1/accounts/me")).status, 401)
 })
