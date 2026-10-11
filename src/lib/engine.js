@@ -1,8 +1,4 @@
 // Pure stress engine. No model call touches a number. Money is integer cents internally.
-(function (root, factory) {
-  if (typeof module === "object" && module.exports) module.exports = factory();
-  else root.Engine = factory();
-})(typeof self !== "undefined" ? self : this, function () {
   const cents = (usd) => Math.round(usd * 100);
   const usd = (c) => c / 100;
 
@@ -76,7 +72,28 @@
     };
   }
 
+  // One illustrative path: per-year DSCR and whether a flood hit that year.
+  function samplePath(deal, scenario, probPerYear, seed) {
+    const rand = rng(seed);
+    const base = evaluate(deal, null).dscr;
+    const flood = evaluate(deal, scenario).dscr;
+    const years = [];
+    for (let y = 0; y < deal.holdYears; y++) {
+      const hit = rand() < probPerYear;
+      years.push({ year: y + 1, flood: hit, dscr: hit ? flood : base });
+    }
+    return years;
+  }
+
   const closedFormShare = (p, years) => 1 - Math.pow(1 - p, years);
 
-  return { evaluate, simulate, closedFormShare, rng };
-});
+// Fixed-rate amortized loan payment. Returns annual debt service in USD (integer cents inside).
+function debtServiceFromLoan({ priceUsd, downPaymentFraction, annualRate, termYears }) {
+  const principal = cents(priceUsd) * (1 - downPaymentFraction);
+  const n = termYears * 12;
+  const r = annualRate / 12;
+  const monthly = r === 0 ? principal / n : (principal * r) / (1 - Math.pow(1 + r, -n));
+  return { monthlyPaymentUsd: usd(Math.round(monthly)), annualDebtServiceUsd: usd(Math.round(monthly) * 12) };
+}
+
+export { debtServiceFromLoan, evaluate, simulate, samplePath, closedFormShare, rng };

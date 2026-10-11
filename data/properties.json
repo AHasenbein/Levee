@@ -1,0 +1,529 @@
+{
+  "builtAt": "2026-10-11T20:45:42.520Z",
+  "sources": [
+    "US Census Geocoder (Public_AR_Current)",
+    "FEMA NFHL MapServer layer 28 (S_FLD_HAZ_AR)"
+  ],
+  "properties": [
+    {
+      "id": "p1",
+      "featured": true,
+      "address": "6900 ONION CREEK DR, AUSTIN, TX, 78744",
+      "label": "Duplex, Onion Creek",
+      "lat": 30.173262092538,
+      "lon": -97.743407304037,
+      "flood": {
+        "zone": "AE",
+        "subtype": null,
+        "sfha": true,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:38.164Z",
+        "inFloodZone": true,
+        "probPerYear": 0.01,
+        "basis": "FEMA definition: Special Flood Hazard Area is the 1-percent annual chance floodplain"
+      },
+      "deal": {
+        "annualRentUsd": 30000,
+        "otherOperatingCostsUsdPerYear": 7000,
+        "insuranceUsdPerYear": 2000,
+        "debtServiceUsdPerYear": 16000,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p2",
+      "featured": true,
+      "address": "900 BARTON SPRINGS RD, AUSTIN, TX, 78704",
+      "label": "Bungalow, Zilker",
+      "lat": 30.259658386912,
+      "lon": -97.753519181468,
+      "flood": {
+        "zone": "AE",
+        "subtype": null,
+        "sfha": true,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:38.366Z",
+        "inFloodZone": true,
+        "probPerYear": 0.01,
+        "basis": "FEMA definition: Special Flood Hazard Area is the 1-percent annual chance floodplain"
+      },
+      "deal": {
+        "annualRentUsd": 36000,
+        "otherOperatingCostsUsdPerYear": 8000,
+        "insuranceUsdPerYear": 2400,
+        "debtServiceUsdPerYear": 15000,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p3",
+      "featured": true,
+      "address": "7800 SHOAL CREEK BLVD, AUSTIN, TX, 78757",
+      "label": "Condo, Allandale",
+      "lat": 30.358612958807,
+      "lon": -97.740853163466,
+      "flood": {
+        "zone": "X",
+        "subtype": "0.2 PCT ANNUAL CHANCE FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:38.544Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "FEMA definition: 0.2-percent annual chance flood hazard"
+      },
+      "deal": {
+        "annualRentUsd": 28000,
+        "otherOperatingCostsUsdPerYear": 6500,
+        "insuranceUsdPerYear": 1800,
+        "debtServiceUsdPerYear": 14000,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p4",
+      "featured": true,
+      "address": "1300 E 7TH ST, AUSTIN, TX, 78702",
+      "label": "House, East Austin",
+      "lat": 30.264978535372,
+      "lon": -97.728796561445,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:38.744Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 48000,
+        "otherOperatingCostsUsdPerYear": 9000,
+        "insuranceUsdPerYear": 2800,
+        "debtServiceUsdPerYear": 12000,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p5",
+      "featured": true,
+      "address": "2900 MONTOPOLIS DR, AUSTIN, TX, 78741",
+      "label": "Fourplex, Montopolis",
+      "lat": 30.214904043183,
+      "lon": -97.710711443562,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:38.982Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 33000,
+        "otherOperatingCostsUsdPerYear": 7500,
+        "insuranceUsdPerYear": 2200,
+        "debtServiceUsdPerYear": 17500,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p6",
+      "featured": false,
+      "address": "5600 BURLESON RD, AUSTIN, TX, 78744",
+      "label": "5600 BURLESON RD, AUSTIN, TX, 78744",
+      "lat": 30.209050930233,
+      "lon": -97.723818054937,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:39.228Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 36750,
+        "otherOperatingCostsUsdPerYear": 8150,
+        "insuranceUsdPerYear": 2200,
+        "debtServiceUsdPerYear": 19700,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p7",
+      "featured": false,
+      "address": "3500 MANCHACA RD, AUSTIN, TX, 78704",
+      "label": "3500 MANCHACA RD, AUSTIN, TX, 78704",
+      "lat": 30.238347283267,
+      "lon": -97.783089912825,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:39.404Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 28250,
+        "otherOperatingCostsUsdPerYear": 6100,
+        "insuranceUsdPerYear": 2200,
+        "debtServiceUsdPerYear": 16300,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p8",
+      "featured": false,
+      "address": "1800 E RIVERSIDE DR, AUSTIN, TX, 78741",
+      "label": "1800 E RIVERSIDE DR, AUSTIN, TX, 78741",
+      "lat": 30.243220440562,
+      "lon": -97.729194691215,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:39.627Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 32200,
+        "otherOperatingCostsUsdPerYear": 6550,
+        "insuranceUsdPerYear": 1500,
+        "debtServiceUsdPerYear": 17250,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p9",
+      "featured": false,
+      "address": "4700 E RIVERSIDE DR, AUSTIN, TX, 78741",
+      "label": "4700 E RIVERSIDE DR, AUSTIN, TX, 78741",
+      "lat": 30.232086508319,
+      "lon": -97.718682932789,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:39.865Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 34900,
+        "otherOperatingCostsUsdPerYear": 7250,
+        "insuranceUsdPerYear": 1600,
+        "debtServiceUsdPerYear": 16500,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p10",
+      "featured": false,
+      "address": "1100 SHOAL CREEK BLVD, AUSTIN, TX, 78701",
+      "label": "1100 SHOAL CREEK BLVD, AUSTIN, TX, 78701",
+      "lat": 30.2755601213,
+      "lon": -97.750646053666,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:40.054Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 35400,
+        "otherOperatingCostsUsdPerYear": 9350,
+        "insuranceUsdPerYear": 2100,
+        "debtServiceUsdPerYear": 14150,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p11",
+      "featured": false,
+      "address": "2700 HEMPHILL PARK, AUSTIN, TX, 78705",
+      "label": "2700 HEMPHILL PARK, AUSTIN, TX, 78705",
+      "lat": 30.292239591795,
+      "lon": -97.741215619429,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:40.233Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 29700,
+        "otherOperatingCostsUsdPerYear": 6500,
+        "insuranceUsdPerYear": 2350,
+        "debtServiceUsdPerYear": 18100,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p12",
+      "featured": false,
+      "address": "1900 E OLTORF ST, AUSTIN, TX, 78741",
+      "label": "1900 E OLTORF ST, AUSTIN, TX, 78741",
+      "lat": 30.231191108747,
+      "lon": -97.735123205605,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:40.456Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 50400,
+        "otherOperatingCostsUsdPerYear": 12800,
+        "insuranceUsdPerYear": 1750,
+        "debtServiceUsdPerYear": 23200,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p13",
+      "featured": false,
+      "address": "5300 ED BLUESTEIN BLVD, AUSTIN, TX, 78723",
+      "label": "5300 ED BLUESTEIN BLVD, AUSTIN, TX, 78723",
+      "lat": 30.290961841165,
+      "lon": -97.66416917145,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:40.678Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 35600,
+        "otherOperatingCostsUsdPerYear": 7850,
+        "insuranceUsdPerYear": 2200,
+        "debtServiceUsdPerYear": 20850,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p14",
+      "featured": false,
+      "address": "3300 CONGRESS AVE S, AUSTIN, TX, 78704",
+      "label": "3300 CONGRESS AVE S, AUSTIN, TX, 78704",
+      "lat": 30.230305252915,
+      "lon": -97.759892280967,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:40.875Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 32450,
+        "otherOperatingCostsUsdPerYear": 8600,
+        "insuranceUsdPerYear": 1500,
+        "debtServiceUsdPerYear": 13250,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p15",
+      "featured": false,
+      "address": "1200 W 6TH ST, AUSTIN, TX, 78703",
+      "label": "1200 W 6TH ST, AUSTIN, TX, 78703",
+      "lat": 30.272837483072,
+      "lon": -97.757147926304,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:41.083Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 33400,
+        "otherOperatingCostsUsdPerYear": 8500,
+        "insuranceUsdPerYear": 2300,
+        "debtServiceUsdPerYear": 16250,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p16",
+      "featured": false,
+      "address": "1405 OLD BASTROP HWY, AUSTIN, TX, 78742",
+      "label": "1405 OLD BASTROP HWY, AUSTIN, TX, 78742",
+      "lat": 30.223397901595,
+      "lon": -97.67808661353,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:41.327Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 51100,
+        "otherOperatingCostsUsdPerYear": 12650,
+        "insuranceUsdPerYear": 2150,
+        "debtServiceUsdPerYear": 24550,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p17",
+      "featured": false,
+      "address": "9200 BRODIE LN, AUSTIN, TX, 78748",
+      "label": "9200 BRODIE LN, AUSTIN, TX, 78748",
+      "lat": 30.192573467399,
+      "lon": -97.844219739864,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:41.520Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 24850,
+        "otherOperatingCostsUsdPerYear": 6700,
+        "insuranceUsdPerYear": 1600,
+        "debtServiceUsdPerYear": 15200,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p18",
+      "featured": false,
+      "address": "1500 BARTON SPRINGS RD, AUSTIN, TX, 78704",
+      "label": "1500 BARTON SPRINGS RD, AUSTIN, TX, 78704",
+      "lat": 30.261596578305,
+      "lon": -97.760058310198,
+      "flood": {
+        "zone": "AE",
+        "subtype": null,
+        "sfha": true,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:42.018Z",
+        "inFloodZone": true,
+        "probPerYear": 0.01,
+        "basis": "FEMA definition: Special Flood Hazard Area is the 1-percent annual chance floodplain"
+      },
+      "deal": {
+        "annualRentUsd": 47250,
+        "otherOperatingCostsUsdPerYear": 10350,
+        "insuranceUsdPerYear": 2600,
+        "debtServiceUsdPerYear": 20750,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p19",
+      "featured": false,
+      "address": "800 BARTON SPRINGS RD, AUSTIN, TX, 78704",
+      "label": "800 BARTON SPRINGS RD, AUSTIN, TX, 78704",
+      "lat": 30.259234358551,
+      "lon": -97.752312888411,
+      "flood": {
+        "zone": "AE",
+        "subtype": null,
+        "sfha": true,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:42.208Z",
+        "inFloodZone": true,
+        "probPerYear": 0.01,
+        "basis": "FEMA definition: Special Flood Hazard Area is the 1-percent annual chance floodplain"
+      },
+      "deal": {
+        "annualRentUsd": 51350,
+        "otherOperatingCostsUsdPerYear": 12450,
+        "insuranceUsdPerYear": 3200,
+        "debtServiceUsdPerYear": 29200,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    },
+    {
+      "id": "p20",
+      "featured": false,
+      "address": "2200 BARTON SPRINGS RD, AUSTIN, TX, 78746",
+      "label": "2200 BARTON SPRINGS RD, AUSTIN, TX, 78746",
+      "lat": 30.26614450788,
+      "lon": -97.768734279328,
+      "flood": {
+        "zone": "X",
+        "subtype": "AREA OF MINIMAL FLOOD HAZARD",
+        "sfha": false,
+        "source": "FEMA NFHL",
+        "queriedAt": "2026-10-11T20:45:42.518Z",
+        "inFloodZone": false,
+        "probPerYear": 0.002,
+        "basis": "Placeholder assumption for minimal-hazard areas (not a FEMA figure)"
+      },
+      "deal": {
+        "annualRentUsd": 40800,
+        "otherOperatingCostsUsdPerYear": 9500,
+        "insuranceUsdPerYear": 2000,
+        "debtServiceUsdPerYear": 23400,
+        "holdYears": 30
+      },
+      "dealBasis": "Demo deal inputs, not real listing data"
+    }
+  ]
+}
