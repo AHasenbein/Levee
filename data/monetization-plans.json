@@ -1,0 +1,171 @@
+{
+  "app": {
+    "name": "Levee",
+    "description": "Stress-tests rental deals against their worst plausible flood year (Austin demo)",
+    "appKey": "levee"
+  },
+  "metrics": [
+    {
+      "name": "Stress analyses",
+      "description": "One flood stress analysis (deal + scenario + 10,000-path simulation)",
+      "metricCode": "stress_analysis",
+      "sourceEventType": "stress_analysis",
+      "unitName": "analysis"
+    },
+    {
+      "name": "Deal memos",
+      "description": "One engine-verified underwriting memo",
+      "metricCode": "deal_memo",
+      "sourceEventType": "deal_memo",
+      "unitName": "memo"
+    },
+    {
+      "name": "Agent scans",
+      "description": "One Deal Finder agent scan (up to 10 paid analyses)",
+      "metricCode": "agent_scan",
+      "sourceEventType": "agent_scan",
+      "unitName": "scan"
+    }
+  ],
+  "plans": [
+    {
+      "planId": "free",
+      "definition": {
+        "name": "Free",
+        "subscriptionPrice": {
+          "currencyCode": "USD",
+          "amount": "0"
+        },
+        "billingCycle": "MONTHLY_UPFRONT",
+        "includedQuotas": {
+          "stress_analysis": {
+            "flat": {
+              "includedQuantity": 3,
+              "overagePolicy": "NO_OVERAGE_THROTTLE"
+            }
+          },
+          "deal_memo": {
+            "flat": {
+              "includedQuantity": 3,
+              "overagePolicy": "NO_OVERAGE_THROTTLE"
+            }
+          },
+          "agent_scan": {
+            "flat": {
+              "includedQuantity": 0,
+              "overagePolicy": "NO_OVERAGE_THROTTLE"
+            }
+          }
+        },
+        "eligibleUpgradePlanCodes": [
+          "investor",
+          "team"
+        ],
+        "eligibleDowngradePlanCodes": []
+      }
+    },
+    {
+      "planId": "investor",
+      "definition": {
+        "name": "Investor",
+        "subscriptionPrice": {
+          "currencyCode": "USD",
+          "amount": "9.50"
+        },
+        "billingCycle": "MONTHLY_UPFRONT",
+        "includedQuotas": {
+          "stress_analysis": {
+            "flat": {
+              "includedQuantity": 60,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "0.25"
+              },
+              "maxOverageCap": 500
+            }
+          },
+          "deal_memo": {
+            "flat": {
+              "includedQuantity": 60,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "0.05"
+              },
+              "maxOverageCap": 500
+            }
+          },
+          "agent_scan": {
+            "flat": {
+              "includedQuantity": 5,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "1.50"
+              },
+              "maxOverageCap": 50
+            }
+          }
+        },
+        "eligibleUpgradePlanCodes": [
+          "team"
+        ],
+        "eligibleDowngradePlanCodes": [
+          "free"
+        ]
+      }
+    },
+    {
+      "planId": "team",
+      "definition": {
+        "name": "Team",
+        "subscriptionPrice": {
+          "currencyCode": "USD",
+          "amount": "39.50"
+        },
+        "billingCycle": "MONTHLY_UPFRONT",
+        "includedQuotas": {
+          "stress_analysis": {
+            "flat": {
+              "includedQuantity": 400,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "0.20"
+              },
+              "maxOverageCap": 5000
+            }
+          },
+          "deal_memo": {
+            "flat": {
+              "includedQuantity": 400,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "0.05"
+              },
+              "maxOverageCap": 5000
+            }
+          },
+          "agent_scan": {
+            "flat": {
+              "includedQuantity": 40,
+              "overagePolicy": "APPLY_FIXED_OVERAGE",
+              "overagePrice": {
+                "currencyCode": "USD",
+                "amount": "1.25"
+              },
+              "maxOverageCap": 500
+            }
+          }
+        },
+        "eligibleUpgradePlanCodes": [],
+        "eligibleDowngradePlanCodes": [
+          "investor",
+          "free"
+        ]
+      }
+    }
+  ]
+}
