@@ -48,6 +48,7 @@ export default function Analyzer({ subject, defaultScenario, priceUsd, autoRun }
 
   const view = result ? (flood ? result.stressed : result.base) : subject.quick ? { noiUsd: subject.quick.baseNoiUsd, dscr: subject.quick.baseDscr } : null
   const failing = !!view && flood && !!result && view.dscr < 1
+  const baseFails = !!result && !flood && result.base.dscr < 1
   const tone = !result || !flood ? undefined : failing ? "fail" : "ok"
   const path = useMemo(
     () => (result ? samplePath(result.base.dscr, result.stressed.dscr, subject.flood.probPerYear, subject.deal.holdYears, seed + roll) : []),
@@ -101,13 +102,14 @@ export default function Analyzer({ subject, defaultScenario, priceUsd, autoRun }
           <Metric label={result && flood ? "DSCR, flood year" : "DSCR, average year"} value={view ? view.dscr.toFixed(2) : "–"} tone={tone} sub="Break-even is 1.00" />
           <Metric label="Net operating income" value={view ? usd(view.noiUsd) : "–"} sub={`Rent ${usd(subject.deal.annualRentUsd)}`} />
           <Metric label="Debt service" value={usd(subject.deal.debtServiceUsdPerYear)} sub="Per year" />
-          <Metric label="Out of pocket" value={result ? (flood ? usd(result.stressed.outOfPocketUsd) : "$0") : "–"} tone={failing ? "fail" : undefined} sub={flood ? "Shortfall in that year" : "Average year"} />
+          <Metric label="Out of pocket" value={result ? usd(flood ? result.stressed.outOfPocketUsd : result.base.outOfPocketUsd) : "–"} tone={failing || baseFails ? "fail" : undefined} sub={flood ? "Shortfall in that year" : "Average year"} />
         </div>
         <p className="mt-3 flex items-center gap-2 text-sm">
-          <span className={cn("size-2 rounded-full", failing ? "bg-fail" : !result ? "bg-muted-foreground" : "bg-ok")} />
+          <span className={cn("size-2 rounded-full", failing || baseFails ? "bg-fail" : !result ? "bg-muted-foreground" : "bg-ok")} />
           {stale ? "Scenario changed. Re-run the analysis to update these numbers."
             : failing ? "Fails. Income after costs no longer covers the mortgage."
             : flood ? "Survives the flood year."
+            : baseFails ? "Does not cover the mortgage even in an average year. A flood year makes it worse."
             : result ? "Approved on an average year. Nobody tested the bad one."
             : subject.custom ? "Run the analysis to see how this deal behaves in a flood year."
             : "Approved on an average year. Nobody tested the bad one."}

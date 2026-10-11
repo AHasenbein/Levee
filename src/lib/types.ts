@@ -32,7 +32,7 @@ export interface Subject {
   featured?: boolean
 }
 export interface StressResult {
-  base: { noiUsd: number; dscr: number }
+  base: { noiUsd: number; dscr: number; outOfPocketUsd: number }
   stressed: { noiUsd: number; dscr: number; outOfPocketUsd: number }
   simulation: {
     paths: number; seed: number; shareOfPathsWithFailingYear: number

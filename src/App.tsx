@@ -8,11 +8,12 @@ import Analyzer from "@/components/Analyzer"
 import CustomDeal from "@/components/CustomDeal"
 import AgentPage from "@/components/AgentPage"
 import PricingPage from "@/components/PricingPage"
+import StartPage from "@/components/StartPage"
 import AboutPage from "@/components/AboutPage"
 import AccountMenu from "@/components/AccountMenu"
 
-type Page = "analyze" | "agent" | "pricing" | "about"
-const NAV: [Page, string][] = [["analyze", "Analyze"], ["agent", "Deal Finder"], ["pricing", "Pricing"], ["about", "About"]]
+type Page = "analyze" | "start" | "agent" | "pricing" | "about"
+const NAV: [Page, string][] = [["analyze", "Analyze"], ["start", "Start here"], ["agent", "Deal Finder"], ["pricing", "Pricing"], ["about", "About"]]
 
 function Shell() {
   const [page, setPage] = useState<Page>("analyze")
@@ -98,6 +99,7 @@ function Shell() {
             {page === "analyze" && (custom === "form"
               ? <CustomDeal onAnalyze={(s) => setCustom(s)} />
               : current && <Analyzer key={current.id} subject={current} defaultScenario={scenario} priceUsd={health?.priceUsd ?? 0.5} autoRun={!!current.custom} />)}
+            {page === "start" && <StartPage onAnalyze={(s) => { setCustom(s); setPage("analyze") }} />}
             {page === "agent" && <AgentPage onOpen={pick} />}
             {page === "pricing" && <PricingPage health={health} />}
             {page === "about" && <AboutPage />}
