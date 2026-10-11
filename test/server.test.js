@@ -41,7 +41,7 @@ test("paid /v1/stress returns the golden numbers and carries assumptions", async
   const res = await post("/v1/stress", golden, { "X-PAYMENT": pay.header })
   assert.equal(res.status, 200)
   const j = await res.json()
-  assert.equal(j.base.noiUsd, 21000); assert.equal(j.base.dscr, 1.3125)
+  assert.equal(j.base.noiUsd, 21000); assert.equal(j.base.dscr, 1.3125); assert.equal(j.base.outOfPocketUsd, 0)
   assert.equal(j.stressed.noiUsd, 7500); assert.equal(j.stressed.dscr, 0.46875); assert.equal(j.stressed.outOfPocketUsd, 8500)
   assert.ok(j.assumptions.length > 5)
   assert.equal(j.payment.mode, "mock")
@@ -358,4 +358,12 @@ test("accounts: google sign-in returns a working key, is stable across logins, a
   assert.equal(me.email, "ada@example.com")
   assert.equal((await go("garbage")).status, 401)
   assert.equal((await a.request("/v1/accounts/me")).status, 401)
+})
+
+test("a deal that fails an average year reports its real average-year shortfall", async () => {
+  const bad = { ...golden, deal: { ...golden.deal, annualRentUsd: 20000, debtServiceUsdPerYear: 30000 } } // NOI 11,000 vs 30,000 debt
+  const { runStress } = await import("../server/handlers.js")
+  const r = runStress({ ...bad, hazard: { ...bad.hazard }, simulation: bad.simulation })
+  assert.equal(r.base.noiUsd, 11000); assert.equal(r.base.outOfPocketUsd, 19000)
+  assert.ok(r.base.dscr < 1)
 })

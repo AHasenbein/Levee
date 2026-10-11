@@ -13,6 +13,28 @@
     yearsIndependent: { value: true, basis: "v1 treats years as independent" },
   };
 
+  // Planner assumptions ("Start here"). Illustrative, not quotes and not lookups: every one is shown on screen.
+  // Fractions are 0-1, never percents. Kept apart from ASSUMPTIONS so stress responses are unchanged.
+  const PLAN_ASSUMPTIONS = {
+    mortgageRate: { value: 0.065, basis: "Assumed 30-year mortgage rate, not a quote; use your own" },
+    termYears: { value: 30, basis: "Standard 30-year mortgage" },
+    rentToPriceMonthly: { value: 0.0075, basis: "Rule of thumb when rent is unknown: monthly rent = 0.75 percent of price" },
+    propertyTaxRate: { value: 0.019, basis: "Assumed yearly property tax as a fraction of price; illustrative Texas-like rate, not a lookup" },
+    landlordInsuranceRate: { value: 0.007, basis: "Assumed yearly landlord insurance as a fraction of price; not a quote" },
+    maintenanceShareOfRent: { value: 0.08, basis: "Assumed repairs set-aside as a share of rent" },
+    vacancyShareOfRent: { value: 0.05, basis: "Assumed empty-unit allowance as a share of rent" },
+    closingCostShare: { value: 0.03, basis: "Assumed closing costs as a fraction of price" },
+    repairBufferShare: { value: 0.01, basis: "Assumed day-one fix-up money as a fraction of price" },
+    reserveMonths: { value: 6, basis: "Months of mortgage and costs kept in the bank" },
+    reitYield: { value: 0.04, basis: "Assumed REIT dividend yield; varies and is not guaranteed" },
+    houseHackDownPaymentFraction: { value: 0.035, basis: "Assumed small owner-occupant loan down payment" },
+    houseHackMortgageRate: { value: 0.0625, basis: "Assumed owner-occupant mortgage rate, not a quote" },
+    houseHackOwnerShareOfRent: { value: 0.5, basis: "You live in one of two units, so half the rent is not collected" },
+    rentalDownPaymentFraction: { value: 0.25, basis: "Assumed down payment on an investment property" },
+    managementFeeShareOfRent: { value: 0.1, basis: "Assumed property manager fee as a share of rent" },
+    turnkeyPriceMarkup: { value: 0.08, basis: "Assumed premium for an already renovated, rented, managed home" },
+  };
+
   const mk = (id, name, zone, inZone, rent, other, ins, debt) => ({
     id, name, zone, inZone,
     deal: {
@@ -40,4 +62,4 @@
     premiumMultiplier: ASSUMPTIONS.premiumMultiplier.value,
   });
 
-export { ASSUMPTIONS, PROPERTIES, scenarioFromAssumptions };
+export { ASSUMPTIONS, PLAN_ASSUMPTIONS, PROPERTIES, scenarioFromAssumptions };

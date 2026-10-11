@@ -24,7 +24,7 @@ export function runStress(req) {
   // The closed form only equals the simulation when the base year passes and a flood always breaks it.
   const closedFormValid = base.dscr >= 1 && stressed.dscr < 1
   return {
-    base: { noiUsd: base.noiUsd, dscr: base.dscr },
+    base: { noiUsd: base.noiUsd, dscr: base.dscr, outOfPocketUsd: base.outOfPocketUsd },
     stressed,
     simulation: {
       ...simulation,
