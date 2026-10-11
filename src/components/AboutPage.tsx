@@ -11,7 +11,7 @@ const CLAIMS: [string, string, string][] = [
   ["Live AgentCore Payments", "Not enabled", "Mock settlement only."],
   ["Subscription billing", "Plans defined, publishing pending", "Plans are drafted; publishing needs payout onboarding. Until then analyses are pay-per-call or prepaid credits."],
   ["Card payments", "Stripe test mode", "Prepaid analysis packs use Stripe Checkout with test cards only. No real money moves."],
-  ["Memo written by a Bedrock model", "Not yet", "Blocked on the account's Anthropic use-case form. The template memo is used until then."],
+  ["Memo written by a Bedrock model", "Yes, Amazon Nova Pro", "Every number in the memo is checked against the engine output. Any mismatch, or an unavailable model, falls back to the template memo."],
 ]
 
 export default function AboutPage() {
