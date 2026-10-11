@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Levee Demo</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1c2430; --muted:#667085; --line:#e4e7ec; --green:#12805c; --greenbg:#e7f6ef; --red:#c0362c; --redbg:#fdecea; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12161c; --card:#1b212a; --text:#e8ecf1; --muted:#98a2b3; --line:#2b3340; --green:#4cc38a; --greenbg:#15332a; --red:#ff7b70; --redbg:#3a1f1d; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui,sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { margin:0; font-size:22px; } h2 { font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:28px 0 10px; }
+  .sub { color:var(--muted); margin:2px 0 20px; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tab { border:1px solid var(--line); background:var(--card); color:var(--text); padding:6px 12px; border-radius:999px; cursor:pointer; font:inherit; }
+  .tab[aria-pressed=true] { border-color:var(--text); font-weight:600; }
+  .card { background:var(--card); border:2px solid var(--green); border-radius:12px; padding:20px; transition:border-color .3s, background .3s; }
+  .card.bad { border-color:var(--red); background:var(--redbg); }
+  .card.good { background:var(--greenbg); }
+  .top { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+  .badge { font-weight:700; padding:2px 10px; border-radius:6px; color:#fff; background:var(--green); }
+  .bad .badge { background:var(--red); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin:16px 0; }
+  .stat .l { color:var(--muted); font-size:12px; } .stat .v { font-size:22px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .dscr .v { font-size:34px; }
+  button.go { background:var(--text); color:var(--bg); border:0; padding:10px 16px; border-radius:8px; font:inherit; font-weight:600; cursor:pointer; }
+  button.go.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+  table { width:100%; border-collapse:collapse; font-size:13px; } td,th { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  pre { margin:0; white-space:pre-wrap; font:12.5px/1.6 ui-monospace,monospace; }
+  .memo p { margin:0 0 8px; } .note { color:var(--muted); font-size:12px; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Levee <span class="note">(working name) &middot; demo</span></h1>
+  <p class="sub">Stress-test a rental deal against its worst plausible year. Illustrative demo data; not real Austin numbers or FEMA lookups. Payments and memo are mocked.</p>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="card good" id="card">
+    <div class="top"><strong id="name"></strong><span class="badge" id="badge"></span></div>
+    <div class="note" id="zone"></div>
+    <div class="grid">
+      <div class="stat dscr"><div class="l" id="dscrL">DSCR (average year)</div><div class="v" id="dscr"></div></div>
+      <div class="stat"><div class="l">NOI</div><div class="v" id="noi"></div></div>
+      <div class="stat"><div class="l">Annual rent</div><div class="v" id="rent"></div></div>
+      <div class="stat"><div class="l">Debt service</div><div class="v" id="debt"></div></div>
+      <div class="stat" id="oopWrap" hidden><div class="l">Out of pocket</div><div class="v" id="oop"></div></div>
+    </div>
+    <button class="go" id="flood">Trigger flood year</button>
+    <button class="go ghost" id="reset" hidden>Back to average year</button>
+  </div>
+
+  <div id="simWrap" hidden>
+    <h2>30-year simulation</h2>
+    <div class="panel"><div class="grid" id="sim"></div><div class="note" id="simNote"></div></div>
+  </div>
+
+  <h2>Deal Finder agent</h2>
+  <div class="panel">
+    <button class="go" id="scan">Run agent under $5 cap</button>
+    <pre id="trace" style="margin-top:12px"></pre>
+  </div>
+
+  <h2>Memo (restates engine output only)</h2>
+  <div class="panel memo" id="memo"><span class="note">Trigger a flood year to generate the memo.</span></div>
+
+  <h2>Assumptions</h2>
+  <div class="panel"><table id="assump"></table></div>
+</main>
+
+<script src="src/engine.js"></script>
+<script src="src/data.js"></script>
+<script src="src/api.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const usd = (n) => "$" + Math.round(n).toLocaleString("en-US");
+  let current = Data.PROPERTIES[0];
+  let stressedView = false;
+  let result = null;
+
+  function getResult() {
+    return Api.stress(Api.requestFor(current), { mockSkipsCheck: true }).body;
+  }
+
+  function render() {
+    const p = current;
+    $("name").textContent = p.name;
+    $("zone").textContent = "Flood zone: " + p.zone + " · annual flood probability " + p.probPerYear;
+    $("rent").textContent = usd(p.deal.annualRentUsd);
+    $("debt").textContent = usd(p.deal.debtServiceUsdPerYear);
+    const view = stressedView ? result.stressed : result.base;
+    const failing = stressedView && view.dscr < 1;
+    $("card").className = "card " + (failing ? "bad" : "good");
+    $("dscr").textContent = view.dscr.toFixed(2);
+    $("noi").textContent = usd(view.noiUsd);
+    $("dscrL").textContent = stressedView ? "DSCR (flood year)" : "DSCR (average year)";
+    $("badge").textContent = failing ? "FAILS: income < mortgage" : stressedView ? "SURVIVES flood year" : "Looks fine on paper";
+    $("oopWrap").hidden = !stressedView;
+    $("oop").textContent = usd(result.stressed.outOfPocketUsd || 0);
+    $("flood").hidden = stressedView; $("reset").hidden = !stressedView;
+    $("simWrap").hidden = !stressedView;
+    if (stressedView) {
+      const s = result.simulation, q = s.minDscrPercentiles;
+      $("sim").innerHTML =
+        stat("Paths with a failing year", (s.shareOfPathsWithFailingYear * 100).toFixed(1) + "%") +
+        stat("Worst-year DSCR p5", q.p5.toFixed(2)) + stat("p50", q.p50.toFixed(2)) + stat("p95", q.p95.toFixed(2));
+      $("simNote").textContent = s.paths.toLocaleString() + " paths, seed " + s.seed + ", independent years. Closed form 1-(1-p)^H = " +
+        (Engine.closedFormShare(p.probPerYear, p.deal.holdYears) * 100).toFixed(1) + "%.";
+      $("memo").innerHTML = Api.memo(p, result).map((t) => "<p>" + t + "</p>").join("");
+    } else {
+      $("memo").innerHTML = '<span class="note">Trigger a flood year to generate the memo.</span>';
+    }
+  }
+  const stat = (l, v) => '<div class="stat"><div class="l">' + l + '</div><div class="v">' + v + "</div></div>";
+
+  function select(p) { current = p; stressedView = false; result = getResult(); renderTabs(); render(); }
+  function renderTabs() {
+    $("tabs").innerHTML = "";
+    Data.PROPERTIES.forEach((p) => {
+      const b = document.createElement("button");
+      b.className = "tab"; b.textContent = p.name.split(",")[0];
+      b.setAttribute("aria-pressed", p === current);
+      b.onclick = () => select(p);
+      $("tabs").appendChild(b);
+    });
+  }
+
+  $("flood").onclick = () => { stressedView = true; render(); };
+  $("reset").onclick = () => { stressedView = false; render(); };
+  $("scan").onclick = () => {
+    const r = Api.agentScan(5);
+    $("trace").textContent = r.trace.join("\n");
+  };
+  $("assump").innerHTML = "<tr><th>Assumption</th><th>Value</th><th>Basis</th></tr>" +
+    Object.entries(Data.ASSUMPTIONS).map(([k, a]) => "<tr><td>" + k + "</td><td>" + a.value + "</td><td>" + a.basis + "</td></tr>").join("");
+
+  select(current);
+</script>
+</body>
+</html>
