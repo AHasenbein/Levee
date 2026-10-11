@@ -1,3 +1,10 @@
 node_modules/
+dist/
 .DS_Store
 .env
+.playwright-mcp/
+.npmrc
+.monetize/
+.env.monetization
+data/.credits.json
+.netlify
