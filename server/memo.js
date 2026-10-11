@@ -2,8 +2,16 @@
 // validated against the engine output, and any mismatch falls back to a deterministic template.
 import { BedrockRuntimeClient, ConverseCommand } from "@aws-sdk/client-bedrock-runtime"
 
-export const MEMO_MODEL_ID = process.env.MEMO_MODEL_ID ?? "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-const REGION = process.env.BEDROCK_REGION ?? "us-east-2"
+export const MEMO_MODEL_ID = process.env.MEMO_MODEL_ID ?? "us.amazon.nova-pro-v1:0"
+// Netlify Functions reserve the AWS_* credential variables, so a deployed key lives in LEVEE_BEDROCK_* and is passed explicitly.
+// Anywhere else (local dev, a role) the default AWS credential chain is used.
+export function bedrockClientConfig(env = process.env) {
+  const cfg = { region: env.BEDROCK_REGION ?? "us-east-2", maxAttempts: 2 }
+  if (env.LEVEE_BEDROCK_ACCESS_KEY_ID && env.LEVEE_BEDROCK_SECRET_ACCESS_KEY) {
+    cfg.credentials = { accessKeyId: env.LEVEE_BEDROCK_ACCESS_KEY_ID, secretAccessKey: env.LEVEE_BEDROCK_SECRET_ACCESS_KEY }
+  }
+  return cfg
+}
 const useBedrock = () => (process.env.MEMO_SOURCE ?? "auto") !== "template"
 
 const usd = (n) => "$" + Math.round(n).toLocaleString("en-US")
@@ -65,7 +73,7 @@ export const _setInvoker = (fn) => { invoker = fn }
 
 async function bedrockMemo(facts) {
   if (invoker) return invoker(facts)
-  client ??= new BedrockRuntimeClient({ region: REGION, maxAttempts: 2 })
+  client ??= new BedrockRuntimeClient(bedrockClientConfig())
   const system = [{ text:
     "You write a short underwriting memo for a small landlord, restating stress-test results. " +
     "Use ONLY the figures in the `display` object of the JSON you are given, copied exactly as written. " +
