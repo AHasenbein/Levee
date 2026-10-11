@@ -367,3 +367,13 @@ test("a deal that fails an average year reports its real average-year shortfall"
   assert.equal(r.base.noiUsd, 11000); assert.equal(r.base.outOfPocketUsd, 19000)
   assert.ok(r.base.dscr < 1)
 })
+
+test("memo: default model is Amazon Nova Pro, and Bedrock credentials come from custom-named secrets only when both are set", async () => {
+  const { MEMO_MODEL_ID, bedrockClientConfig } = await import("../server/memo.js")
+  if (!process.env.MEMO_MODEL_ID) assert.equal(MEMO_MODEL_ID, "us.amazon.nova-pro-v1:0")
+  assert.deepEqual(bedrockClientConfig({}), { region: "us-east-2", maxAttempts: 2 })
+  assert.deepEqual(bedrockClientConfig({ BEDROCK_REGION: "us-west-2" }), { region: "us-west-2", maxAttempts: 2 })
+  assert.deepEqual(bedrockClientConfig({ LEVEE_BEDROCK_ACCESS_KEY_ID: "AK", LEVEE_BEDROCK_SECRET_ACCESS_KEY: "SK" }),
+    { region: "us-east-2", maxAttempts: 2, credentials: { accessKeyId: "AK", secretAccessKey: "SK" } })
+  assert.equal("credentials" in bedrockClientConfig({ LEVEE_BEDROCK_ACCESS_KEY_ID: "only-half" }), false)
+})
