@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { ApiError, loanCalc, lookupAddress } from "@/lib/client"
 import { usd } from "@/lib/format"
+import { addressFromInput } from "@/lib/zillow.js"
 import type { Flood, Subject } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -35,7 +36,7 @@ export default function CustomDeal({ onAnalyze }: { onAnalyze: (s: Subject) => v
   async function look() {
     setLooking(true); setLookErr(null); setFlood(null)
     try {
-      const r = await lookupAddress(address)
+      const r = await lookupAddress(addressFromInput(address))
       setFlood(r.flood); setMatched(r.address); setProb(String(r.flood.probPerYear))
     } catch (e) { setLookErr(e instanceof ApiError ? e.message : "Lookup failed") }
     finally { setLooking(false) }
